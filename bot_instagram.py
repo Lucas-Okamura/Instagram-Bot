@@ -21,7 +21,7 @@ class InstagramBot:
 
         self.username = username
         self.password = password
-        self.driver = webdriver.Chrome(executable_path = "PUT HERE THE PATH TO THE CHROME DRIVER")
+        self.driver = webdriver.Chrome(executable_path = "INPUT CHROME DRIVE PATH HERE")
 
     def login(self):
         '''
@@ -84,9 +84,9 @@ class InstagramBot:
         time.sleep(3)
 
         people = [
-            "neymar is the best",
-            'psg will win everything',
-            'lets go neymar!'
+            "@person1",
+            "@person2",
+            "@person3"
             ]
 
         while (1):
@@ -107,7 +107,8 @@ class InstagramBot:
                 i += 1
 
                 print("You published ", i, " commentaries")
-                time.sleep(random.randint(2,5))
+
+                time.sleep(random.randint(45, 120))
             
                 if i % 100 == 0:
                     time.sleep(60*5)
