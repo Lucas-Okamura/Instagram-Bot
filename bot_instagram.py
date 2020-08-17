@@ -21,7 +21,7 @@ class InstagramBot:
 
         self.username = username
         self.password = password
-        self.driver = webdriver.Chrome(executable_path = "INPUT CHROME DRIVE PATH HERE")
+        self.driver = webdriver.Chrome(executable_path = "PUT THE CHROME DRIVER PATH HERE")
 
     def login(self):
         '''
@@ -94,9 +94,21 @@ class InstagramBot:
                 driver.find_element_by_class_name("Ypffh").click()
                 commentary_box = driver.find_element_by_class_name("Ypffh")
                 time.sleep(random.randint(1, 10)/40)
+                cache = []
 
                 for num in range(num_people):
                     person = random.choice(people)
+
+                    if person not in cache:
+                        cache.append(person)
+
+                    elif person in cache:
+                        check = True
+                        while check:
+                            person = random.choice(people)
+                            if person not in cache:
+                                check = False
+                    
                     self.human_type(person, commentary_box)
                     time.sleep(random.randint(1,4)/4)
 
@@ -108,7 +120,7 @@ class InstagramBot:
 
                 print("You published ", i, " commentaries")
 
-                time.sleep(random.randint(45, 120))
+                time.sleep(random.randint(45, 90))
             
                 if i % 100 == 0:
                     time.sleep(60*5)
@@ -125,3 +137,4 @@ num_people = int(input("Insert the number of people you want to tag: "))
 
 instaBot = InstagramBot(username, password)
 instaBot.login()
+
