@@ -108,6 +108,7 @@ class InstagramBot:
                             person = random.choice(people)
                             if person not in cache:
                                 check = False
+                                cache.append(person)
                     
                     self.human_type(person, commentary_box)
                     time.sleep(random.randint(1,4)/4)
