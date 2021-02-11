@@ -2,15 +2,19 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
 import random
-import stdiomask
+import pandas as pd
+import os
 
 class InstagramBot:
-    def __init__(self, username, password):
+    def __init__(self, username, password, function, url, num_people=1):
         '''
         Bot that comment on photos on Instagram
         Args:
             username:string: username to an Instagram account
             password:string: password to an Instagram account
+            function:string: 'comment' if only comment or 'get_comments' to get comments (scrapper)
+            url:string/list: unique url if 'comment', list of url if 'get_comments'
+            num_people(optional):int: number of people to tag, valid only if 'comment'
             
         Attributes:
             username:string: username given
@@ -21,7 +25,10 @@ class InstagramBot:
 
         self.username = username
         self.password = password
-        self.driver = webdriver.Chrome(executable_path = "PUT THE CHROME DRIVER PATH HERE")
+        self.function = function
+        self.url = url
+        self.num_people = num_people
+        self.driver = webdriver.Chrome(executable_path = "D:\Códigos\Chrome Driver\chromedriver.exe")
 
     def login(self):
         '''
@@ -50,7 +57,7 @@ class InstagramBot:
         not_now_login.click()
         time.sleep(1)
 
-        self.comment_on_post(url_target, num_people)
+        self.run_bot()
 
     @staticmethod
     def human_type(phrase, input_comment):
@@ -67,20 +74,19 @@ class InstagramBot:
             time.sleep(random.randint(1,5)/30)
         input_comment.send_keys(" ")
 
-    def comment_on_post(self, url, num_people = 1):
+    def comment_on_post(self, num_people):
         '''
         Comment on the choosen URL post, choosing random strings on the people list, the number of times that were specified
         on "num_people"
         
         Args:
-            url:string: URL of the post to comment
             num_people(optional):int: number of people to pick from the people list
         '''
         
         i = 0       # Counter
 
         driver = self.driver
-        driver.get(url)
+        driver.get(self.url)
         time.sleep(3)
 
         people = [
@@ -130,12 +136,80 @@ class InstagramBot:
                 print(e)
                 time.sleep(5)
 
-username = str(input("Insert your Instagram username: "))
-password = stdiomask.getpass(prompt = "Insert you Instagram password: ", mask = '*')
+    def scroll(self):
+        """
+        Scroll screen to show all comments
 
-url_target = str(input("Insert the Instagram URL to be commented: "))
-num_people = int(input("Insert the number of people you want to tag: "))
+        Args:
+            None
+        """
 
-instaBot = InstagramBot(username, password)
-instaBot.login()
+        # Get scroll height
+        try:
+            driver = self.driver
+            while True:
+                # Click on "plus" sign
+                print("Carregando mais comentários...")
+                driver.find_element_by_xpath("//button[contains(@class, 'dCJp8')]").click()
+
+                # Wait to load page
+                time.sleep(1)
+        except:
+            pass
+
+    def get_comments(self):
+        """
+        Get all the comments from Instagram URLs
+
+        Args:
+            None
+        """     
+        try:
+            # Getting all the comments from the post
+            all_comments = []
+            for url in self.url:
+                driver = self.driver
+                driver.get(url)
+                time.sleep(3)
+
+                # Scroll to load all the comments
+                self.scroll()
+
+                comment = driver.find_elements_by_class_name('gElp9 ')
+                for c in comment:
+                    container = c.find_element_by_class_name('C4VMK')
+                    content = container.find_elements_by_xpath('(.//span)')[1].text
+                    content = content.replace('\n', ' ').strip().rstrip()
+                    print(content)
+                    all_comments.append(content)
+                    time.sleep(5)
+
+            # Exporting comments to csv
+            df = pd.DataFrame({"comments" : all_comments})
+
+            # Check if file already exists and export to csv
+            i = 0
+            exists = True
+
+            while exists:
+                filename = f'comments{i}.csv'
+                filepath = os.path.join(os.path.dirname(os.path.abspath(__file__)), filename)
+                if os.path.isfile(filepath):
+                    i += 1
+                else:
+                    df.to_csv(filename, sep=';', index=False)
+                    exists = False
+
+        except Exception as e:
+            print(e)
+            time.sleep(5)
+
+
+    def run_bot(self):
+        if self.function == 'comment':
+            self.comment_on_post(self.num_people)
+            print('chegou')
+
+        elif self.function == 'get_comments':
+             self.get_comments()
 
