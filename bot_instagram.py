@@ -182,7 +182,7 @@ class InstagramBot:
                     content = content.replace('\n', ' ').strip().rstrip()
                     print(content)
                     all_comments.append(content)
-                    time.sleep(5)
+                    time.sleep(3)
 
             # Exporting comments to csv
             df = pd.DataFrame({"comments" : all_comments})
