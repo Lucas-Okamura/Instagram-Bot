@@ -28,7 +28,7 @@ class InstagramBot:
         self.function = function
         self.url = url
         self.num_people = num_people
-        self.driver = webdriver.Chrome(executable_path = "D:\Códigos\Chrome Driver\chromedriver.exe")
+        self.driver = webdriver.Chrome(executable_path = "INPUT CHROME DRIVER PATH HERE")
 
     def login(self):
         '''
