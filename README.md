@@ -26,8 +26,11 @@ Contains pertinent information to the bot. Inside the file, you must provide:
 * **username(string)**: username of Instagram account
 * **password(string**: password of Instagram account
 * **function(string)**: currenty, can receive two values: "comment" and "get_comments"
+
         * "comment": comment nonstop on Instagram post, needs to provide @s in the "people" list on "comment_on_post" function
+
         * "get_comments": scrapper to get all Instagram comments from one or more posts
+        
 * **url_comment(string)**: URL which will be commented
 * **url_get_comments(list)**: list with one or more URLs to get the comments (scrapper)
 * **num_people(int, optional)**: pertinent when using "comment" function, choose the number of people to tag in the same commentary see
