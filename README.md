@@ -1,5 +1,5 @@
 # Instagram Bot
-Bot that comments on Instagram posts using Selenium. Must have Chrome Driver installed.
+Bot that comments on Instagram posts or get all the comments (scrapper) using Selenium. Must have Chrome Driver installed.
 Language: Portuguese/BR
 
 Don't forget to install Chrome Driver and put the path on the code (download Chrome Driver according to your Google Chrome version)
@@ -17,7 +17,7 @@ Contains InstagramBot class, which has, currently, two functions, to comment and
     * url("comment":string, "get_comments":list)
     * num_people(int, optional)
 
-See next section to more information about the arguments
+See next section for more information about the arguments
 
 ### 1.2. config.py
 
